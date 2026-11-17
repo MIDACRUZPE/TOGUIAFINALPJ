@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Técnica - Proyecto de Aula</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Acordeón: animación suave sin límite fijo de altura */
+        .acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
+        .acc-panel.open { grid-template-rows: 1fr; }
+        .acc-panel > .acc-inner { overflow: hidden; }
+        .acc-icon { transition: transform .3s ease; }
+        .placeholder { background: #fef3c7; border: 1px dashed #d97706; color: #92400e; padding: 0 .35rem; border-radius: .25rem; font-weight: 600; }
+        .sem-btn[aria-pressed="true"] { outline: 3px solid #0f172a; outline-offset: 2px; }
+        /* Impresión / PDF: todo abierto y sin elementos interactivos */
+        @media print {
+            .acc-panel { grid-template-rows: 1fr !important; }
+            .acc-icon, .no-print { display: none !important; }
+            header { box-shadow: none !important; }
+            .shadow-lg, .shadow-xl { box-shadow: none !important; }
+            .break-avoid { break-inside: avoid; }
+            main { margin-top: 1rem !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased">
+
+    <header class="bg-[#002855] text-white py-14 px-6 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-80 h-80 bg-blue-500 opacity-10 rounded-full -mr-32 -mt-32"></div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <div class="inline-block bg-yellow-400 text-[#002855] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6">
+                Teoría de las Organizaciones
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
+                GUÍA TÉCNICA DE CONSTRUCCIÓN <br class="hidden md:block">DEL PROYECTO DE AULA
+            </h1>
+            <p class="text-blue-100 text-lg md:text-xl font-light max-w-2xl mx-auto border-t border-blue-400/30 pt-4">
+                Manual detallado de redacción, estructura y lógica investigativa
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto -mt-10 px-4 pb-24">
+
+        <!-- Propósito y mentalidad -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border-t-4 border-blue-600 break-avoid">
+                <div class="flex items-center gap-3 mb-6 text-blue-700">
+                    <i data-lucide="compass" class="w-7 h-7"></i>
+                    <h2 class="text-xl font-black uppercase tracking-tight">Propósito Técnico</h2>
+                </div>
+                <p class="text-sm text-slate-600 mb-4">Esta herramienta elimina la ambigüedad en la entrega. Su objetivo es:</p>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="check-circle" class="text-green-500 mt-0.5 shrink-0 w-5 h-5"></i>
+                        <span class="text-sm font-medium">Estandarizar el contenido de cada apartado del documento final.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="check-circle" class="text-green-500 mt-0.5 shrink-0 w-5 h-5"></i>
+                        <span class="text-sm font-medium">Garantizar la conexión lógica entre el problema, los objetivos, los resultados y las conclusiones.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="check-circle" class="text-green-500 mt-0.5 shrink-0 w-5 h-5"></i>
+                        <span class="text-sm font-medium">Orientar la elección de la ruta metodológica: <strong>aplicada</strong> o <strong>documental</strong>.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 p-6 md:p-8 rounded-2xl shadow-xl text-white break-avoid">
+                <div class="flex items-center gap-3 mb-6 text-yellow-400">
+                    <i data-lucide="brain-circuit" class="w-7 h-7"></i>
+                    <h2 class="text-xl font-black uppercase tracking-tight">Mentalidad de Investigador</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-white/5 p-4 rounded-lg border-l-2 border-red-500">
+                        <p class="text-xs font-bold text-red-400 uppercase mb-1">Evitar:</p>
+                        <p class="text-sm text-slate-300">El "relleno" textual y la descripción genérica de conceptos copiados de internet.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-lg border-l-2 border-green-500">
+                        <p class="text-xs font-bold text-green-400 uppercase mb-1">Priorizar:</p>
+                        <p class="text-sm text-slate-100">La capacidad de observar una realidad empresarial y explicarla mediante la teoría.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-3 mb-4 no-print">
+            <button type="button" onclick="setAll(true)" class="text-xs font-semibold text-blue-700 hover:underline">Abrir todo</button>
+            <span class="text-slate-300">|</span>
+            <button type="button" onclick="setAll(false)" class="text-xs font-semibold text-blue-700 hover:underline">Cerrar todo</button>
+            <span class="text-slate-300">|</span>
+            <button type="button" onclick="window.print()" class="text-xs font-semibold text-blue-700 hover:underline flex items-center gap-1"><i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir / PDF</button>
+        </div>
+
+        <div class="space-y-6">
+
+            <!-- ============ MÓDULO I ============ -->
+            <section class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <button type="button" class="acc-btn w-full px-6 md:px-8 py-6 text-left flex justify-between items-center hover:bg-slate-50 transition-all" aria-expanded="false" aria-controls="mod-1">
+                    <span class="flex items-center gap-4">
+                        <span class="bg-blue-100 text-blue-700 w-10 h-10 rounded-xl flex items-center justify-center font-black shrink-0">I</span>
+                        <span class="font-bold text-slate-800 text-base md:text-lg tracking-tight uppercase">Las Reglas del Juego (Rigurosidad)</span>
+                    </span>
+                    <i data-lucide="chevron-down" class="acc-icon text-slate-400 shrink-0"></i>
+                </button>
+                <div id="mod-1" class="acc-panel"><div class="acc-inner">
+                    <div class="p-6 md:p-8 border-t border-slate-100 grid md:grid-cols-2 gap-6">
+                        <div class="p-5 bg-indigo-50 rounded-xl break-avoid">
+                            <h3 class="font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                                <i data-lucide="library" class="w-5 h-5"></i> Fuentes Académicas
+                            </h3>
+                            <ul class="text-sm space-y-2 text-indigo-800">
+                                <li>• Mínimo <strong>10 referencias</strong> bibliográficas.</li>
+                                <li>• Obligatorio: <strong>4 fuentes</strong> de la biblioteca CREA. <span class="placeholder">Agregar enlace de acceso a CREA</span></li>
+                                <li>• <strong>Sí valen:</strong> libros académicos, artículos de revistas indexadas, informes oficiales (DANE, Supersociedades, Cámaras de Comercio, MinCIT) y documentos de la propia empresa.</li>
+                                <li>• <strong>Veto total:</strong> Wikipedia, blogs, Gestiopolis, Monografías.com, Rincón del Vago y similares.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-red-50 rounded-xl break-avoid">
+                            <h3 class="font-bold text-red-900 mb-3 flex items-center gap-2">
+                                <i data-lucide="shield-alert" class="w-5 h-5"></i> Normas APA y Plagio
+                            </h3>
+                            <ul class="text-sm space-y-2 text-red-800">
+                                <li>• Citación y referenciación en <strong>APA 7.ª edición</strong>.</li>
+                                <li>• <strong>Umbral de Turnitin:</strong> máximo 30%.</li>
+                                <li>• El parafraseo no exime de la citación.</li>
+                                <li>• Tablas y figuras numeradas, con título y fuente en formato APA.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-amber-50 rounded-xl break-avoid">
+                            <h3 class="font-bold text-amber-900 mb-3 flex items-center gap-2">
+                                <i data-lucide="bot" class="w-5 h-5"></i> Uso de Inteligencia Artificial
+                            </h3>
+                            <ul class="text-sm space-y-2 text-amber-900">
+                                <li>• La IA puede apoyar la revisión de redacción y ortografía, y su uso debe <strong>declararse</strong>.</li>
+                                <li>• No reemplaza la recolección de datos, el análisis ni las conclusiones: esos son su aporte.</li>
+                                <li>• Toda referencia debe existir y ser verificable. Una cita inventada se considera falta académica.</li>
+                            </ul>
+                        </div>
+                        <div class="p-5 bg-slate-100 rounded-xl break-avoid">
+                            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-5 h-5"></i> Formato de Entrega
+                            </h3>
+                            <ul class="text-sm space-y-2 text-slate-700">
+                                <li>• Extensión: <span class="placeholder">definir</span></li>
+                                <li>• Fuente, tamaño e interlineado: <span class="placeholder">definir</span></li>
+                                <li>• Archivo: <span class="placeholder">definir (PDF / Word)</span></li>
+                                <li>• Fecha y canal de entrega: <span class="placeholder">definir</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div></div>
+            </section>
+
+            <!-- ============ MÓDULO II ============ -->
+            <section class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <button type="button" class="acc-btn w-full px-6 md:px-8 py-6 text-left flex justify-between items-center hover:bg-slate-50 transition-all" aria-expanded="false" aria-controls="mod-2">
+                    <span class="flex items-center gap-4">
+                        <span class="bg-blue-100 text-blue-700 w-10 h-10 rounded-xl flex items-center justify-center font-black shrink-0">II</span>
+                        <span class="font-bold text-slate-800 text-base md:text-lg tracking-tight uppercase">El Mapa (Estructura y Lógica del Flujo)</span>
+                    </span>
+                    <i data-lucide="chevron-down" class="acc-icon text-slate-400 shrink-0"></i>
+                </button>
+                <div id="mod-2" class="acc-panel"><div class="acc-inner">
+                    <div class="p-6 md:p-8 border-t border-slate-100 space-y-8">
+
+                        <p class="text-sm text-slate-600">Esta es la <strong>estructura oficial del documento</strong>. El Módulo IV explica cómo redactar cada apartado con la misma numeración.</p>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 break-avoid">
+                                <p class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Preliminares</p>
+                                <p class="text-sm">Portada · Resumen y palabras clave · Introducción</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-blue-200 bg-blue-50 break-avoid">
+                                <p class="text-xs font-black text-blue-600 uppercase tracking-wider mb-2">Fase 1 · Planteamiento</p>
+                                <p class="text-sm">1. Problema y pregunta · 2. Objetivos · 3. Justificación · 4. Antecedentes</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-indigo-200 bg-indigo-50 break-avoid">
+                                <p class="text-xs font-black text-indigo-600 uppercase tracking-wider mb-2">Fase 2 · Fundamentación</p>
+                                <p class="text-sm">5. Marco contextual · 6. Marco teórico · 7. Marco conceptual</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-orange-200 bg-orange-50 break-avoid">
+                                <p class="text-xs font-black text-orange-600 uppercase tracking-wider mb-2">Fase 3 · Trabajo investigativo</p>
+                                <p class="text-sm">8. Metodología (ruta aplicada o documental) · 9. Análisis de resultados y discusión</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-green-200 bg-green-50 sm:col-span-2 break-avoid">
+                                <p class="text-xs font-black text-green-700 uppercase tracking-wider mb-2">Fase 4 · Cierre</p>
+                                <p class="text-sm">10. Conclusiones · 11. Referencias · Anexos (instrumentos aplicados o matriz de análisis)</p>
+                            </div>
+                        </div>
+
+                        <!-- Hilo conductor -->
+                        <div class="bg-slate-900 text-white rounded-xl p-6 break-avoid">
+                            <h3 class="font-bold text-yellow-400 mb-1 flex items-center gap-2"><i data-lucide="git-branch" class="w-5 h-5"></i> El hilo conductor</h3>
+                            <p class="text-sm text-slate-300 mb-5">Cada objetivo específico debe poder rastrearse de principio a fin. Si un eslabón falta, el documento pierde coherencia.</p>
+                            <div class="flex flex-col md:flex-row md:items-stretch gap-2 text-center text-sm">
+                                <div class="flex-1 bg-white/10 rounded-lg p-3"><span class="block text-xs text-yellow-300 font-bold uppercase">Objetivo específico</span>Identificar…</div>
+                                <div class="self-center text-yellow-400 rotate-90 md:rotate-0">➔</div>
+                                <div class="flex-1 bg-white/10 rounded-lg p-3"><span class="block text-xs text-yellow-300 font-bold uppercase">Categoría teórica</span>Postulado del autor</div>
+                                <div class="self-center text-yellow-400 rotate-90 md:rotate-0">➔</div>
+                                <div class="flex-1 bg-white/10 rounded-lg p-3"><span class="block text-xs text-yellow-300 font-bold uppercase">Instrumento / Matriz</span>Preguntas o fila de la matriz</div>
+                                <div class="self-center text-yellow-400 rotate-90 md:rotate-0">➔</div>
+                                <div class="flex-1 bg-white/10 rounded-lg p-3"><span class="block text-xs text-yellow-300 font-bold uppercase">Análisis</span>Hallazgo vs. teoría</div>
+                                <div class="self-center text-yellow-400 rotate-90 md:rotate-0">➔</div>
+                                <div class="flex-1 bg-white/10 rounded-lg p-3"><span class="block text-xs text-yellow-300 font-bold uppercase">Conclusión</span>Responde al objetivo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div></div>
+            </section>
+
+            <!-- ============ MÓDULO III: RUTA METODOLÓGICA ============ -->
+            <section class="bg-white rounded-2xl shadow-lg border-2 border-orange-300 overflow-hidden">
+                <button type="button" class="acc-btn w-full px-6 md:px-8 py-6 text-left flex justify-between items-center hover:bg-orange-50/50 transition-all" aria-expanded="false" aria-controls="mod-3">
+                    <span class="flex items-center gap-4">
+                        <span class="bg-orange-100 text-orange-700 w-10 h-10 rounded-xl flex items-center justify-center font-black shrink-0">III</span>
+                        <span class="font-bold text-slate-800 text-base md:text-lg tracking-tight uppercase">Elige tu Ruta: Aplicada o Documental</span>
+                    </span>
+                    <i data-lucide="chevron-down" class="acc-icon text-slate-400 shrink-0"></i>
+                </button>
+                <div id="mod-3" class="acc-panel"><div class="acc-inner">
+                    <div class="p-6 md:p-8 border-t border-slate-100 space-y-8">
+
+                        <!-- Decisión -->
+                        <div class="text-center break-avoid">
+                            <div class="inline-block bg-[#002855] text-white rounded-2xl px-6 py-4 max-w-xl">
+                                <p class="text-xs uppercase tracking-widest text-yellow-400 font-bold mb-1">La pregunta que define la ruta</p>
+                                <p class="text-base md:text-lg font-bold">¿Tenemos acceso real para entrevistar a una persona con <span class="text-yellow-300">rol estratégico</span> en la empresa?</p>
+                                <p class="text-xs text-blue-200 mt-2">Gerente, propietario, director o jefe de área con poder de decisión.</p>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-3 max-w-xl mx-auto">El acceso suele depender del tamaño de la empresa: en una micro o pequeña empresa es más fácil llegar al dueño o gerente; en una gran empresa, muchas veces no.</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Aplicada -->
+                            <div class="rounded-2xl border-2 border-green-400 overflow-hidden break-avoid">
+                                <div class="bg-green-500 text-white px-5 py-3 flex items-center gap-2">
+                                    <i data-lucide="mic" class="w-5 h-5"></i>
+                                    <p class="font-black uppercase">Sí ➔ Investigación Aplicada</p>
+                                </div>
+                                <div class="p-5 space-y-3 text-sm text-slate-700">
+                                    <p><strong>Fuente principal:</strong> información primaria que ustedes mismos recogen en la empresa.</p>
+                                    <p><strong>Técnicas:</strong> entrevista a la persona con rol estratégico (obligatoria) y, si aplica, encuesta a colaboradores u observación.</p>
+                                    <p><strong>Instrumentos:</strong> guion de entrevista semiestructurada y/o cuestionario.</p>
+                                    <p><strong>Cómo se construye el instrumento:</strong> cada bloque de preguntas corresponde a una categoría del marco teórico y a un objetivo específico.</p>
+                                    <p><strong>Análisis:</strong> transcribir la entrevista, organizar las respuestas por categoría y contrastarlas con la teoría. Las encuestas se tabulan y se presentan en tablas o gráficas.</p>
+                                    <p><strong>Ética:</strong> consentimiento informado del entrevistado y autorización de la empresa. Si la empresa lo pide, se puede usar un nombre ficticio.</p>
+                                    <p><strong>Anexos:</strong> guion, cuestionario, consentimiento y transcripción (o evidencia de la entrevista).</p>
+                                </div>
+                            </div>
+                            <!-- Documental -->
+                            <div class="rounded-2xl border-2 border-blue-400 overflow-hidden break-avoid">
+                                <div class="bg-blue-600 text-white px-5 py-3 flex items-center gap-2">
+                                    <i data-lucide="table-2" class="w-5 h-5"></i>
+                                    <p class="font-black uppercase">No ➔ Investigación Documental</p>
+                                </div>
+                                <div class="p-5 space-y-3 text-sm text-slate-700">
+                                    <p><strong>Fuente principal:</strong> documentos públicos sobre la empresa y su sector.</p>
+                                    <p><strong>Técnica:</strong> revisión y análisis documental.</p>
+                                    <p><strong>Instrumento:</strong> <em>matriz de análisis documental</em>.</p>
+                                    <p><strong>Documentos típicos:</strong> informes de gestión y de sostenibilidad, estados financieros, sitio web corporativo, registros de Supersociedades o RUES, noticias de prensa económica, estudios de caso e informes sectoriales.</p>
+                                    <p><strong>Cómo se construye la matriz:</strong> las filas son las categorías del marco teórico (ligadas a cada objetivo) y las columnas registran la evidencia encontrada.</p>
+                                    <p><strong>Análisis:</strong> leer la matriz por categoría, identificar patrones, coincidencias y contradicciones, y contrastarlos con la teoría.</p>
+                                    <p><strong>Anexos:</strong> la matriz completa diligenciada.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ejemplo de matriz -->
+                        <div class="break-avoid">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="layout-grid" class="w-5 h-5 text-blue-600"></i> Modelo de matriz de análisis documental</h3>
+                            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                                <table class="w-full text-xs md:text-sm text-left min-w-[640px]">
+                                    <thead class="bg-slate-100 text-slate-700">
+                                        <tr>
+                                            <th class="p-3 font-bold">Objetivo específico</th>
+                                            <th class="p-3 font-bold">Categoría teórica</th>
+                                            <th class="p-3 font-bold">Documento (fuente APA)</th>
+                                            <th class="p-3 font-bold">Evidencia encontrada</th>
+                                            <th class="p-3 font-bold">Interpretación a la luz de la teoría</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-slate-600">
+                                        <tr class="border-t border-slate-200">
+                                            <td class="p-3">OE1</td>
+                                            <td class="p-3">Unidad de mando (Fayol)</td>
+                                            <td class="p-3">Informe de gestión 2024 (Empresa X, 2025)</td>
+                                            <td class="p-3">El organigrama muestra áreas que reportan a dos gerencias.</td>
+                                            <td class="p-3">Se aleja del principio de unidad de mando…</td>
+                                        </tr>
+                                        <tr class="border-t border-slate-200 bg-slate-50/60">
+                                            <td class="p-3">OE1</td>
+                                            <td class="p-3">…</td>
+                                            <td class="p-3">…</td>
+                                            <td class="p-3">…</td>
+                                            <td class="p-3">…</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-2">Recomendación: para cada categoría, busquen evidencia en al menos dos documentos distintos.</p>
+                        </div>
+
+                        <div class="p-4 bg-orange-50 rounded-lg border border-orange-100 text-sm text-orange-900 break-avoid">
+                            <strong>En ambas rutas:</strong> la teoría organiza el instrumento. Ni las preguntas de la entrevista ni las filas de la matriz se inventan sueltas: salen de las categorías del Marco Teórico. En la Metodología, expliquen por qué eligieron su ruta.
+                        </div>
+                    </div>
+                </div></div>
+            </section>
+
+            <!-- ============ MÓDULO IV: ANATOMÍA ============ -->
+            <section class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <button type="button" class="acc-btn w-full px-6 md:px-8 py-6 text-left flex justify-between items-center hover:bg-slate-50 transition-all" aria-expanded="false" aria-controls="mod-4">
+                    <span class="flex items-center gap-4">
+                        <span class="bg-blue-100 text-blue-700 w-10 h-10 rounded-xl flex items-center justify-center font-black shrink-0">IV</span>
+                        <span class="font-bold text-blue-700 text-base md:text-lg tracking-tight uppercase">La Anatomía (Manual de Redacción)</span>
+                    </span>
+                    <i data-lucide="chevron-down" class="acc-icon text-slate-400 shrink-0"></i>
+                </button>
+                <div id="mod-4" class="acc-panel"><div class="acc-inner">
+                    <div class="p-6 md:p-8 border-t border-slate-100 space-y-8">
+
+                        <p class="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">Para ilustrar las secciones se usa un caso ficticio: <strong>"Distribuidora Andina S.A.S."</strong>, una pequeña empresa de distribución de alimentos.</p>
+
+                        <!-- Resumen -->
+                        <div class="border-l-4 border-slate-400 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Resumen y palabras clave</h3>
+                            <p class="text-sm text-slate-600 mb-3">Máximo 200 palabras. Es la "vitrina" del proyecto: se escribe <strong>al final</strong>, cuando ya tienen resultados.</p>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-dashed border-slate-300">
+                                <p class="text-xs font-bold text-blue-700 uppercase mb-2">Estructura sugerida:</p>
+                                <p class="text-sm text-slate-600 leading-relaxed italic">
+                                    "El presente trabajo analiza [problema] en la empresa [nombre], a la luz de [teoría]. Se desarrolló una investigación [aplicada / documental] mediante [entrevista a… / matriz de análisis de… documentos]. Los resultados muestran que [hallazgo principal] y se concluye que [impacto o respuesta a la pregunta]."
+                                </p>
+                                <p class="text-sm text-slate-600 mt-2"><strong>Palabras clave:</strong> de 3 a 5 términos, separados por punto y coma.</p>
+                            </div>
+                        </div>
+
+                        <!-- Introducción -->
+                        <div class="border-l-4 border-slate-400 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">Introducción</h3>
+                            <p class="text-sm text-slate-600 mb-2">Engancha al lector. No defina conceptos aquí.</p>
+                            <ul class="text-sm text-slate-600 space-y-1 ml-5 list-disc">
+                                <li>Presentación del tema general en el sector económico.</li>
+                                <li>Breve mención del problema identificado.</li>
+                                <li>Importancia del estudio para la academia y la empresa.</li>
+                                <li>Ruta metodológica elegida (aplicada o documental).</li>
+                                <li>Breve descripción de cómo está organizado el documento.</li>
+                            </ul>
+                        </div>
+
+                        <!-- 1 Problema y pregunta -->
+                        <div class="border-l-4 border-blue-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">1. Planteamiento del problema y pregunta de investigación</h3>
+                            <p class="text-sm text-slate-600 mb-3">Describan la situación observada en la empresa: qué pasa, desde cuándo, en qué área, qué efectos tiene y cuáles podrían ser sus causas. Cierren con <strong>una sola pregunta</strong>.</p>
+                            <p class="text-sm text-slate-600 mb-3">Una buena pregunta está <strong>delimitada</strong> (empresa, área, periodo), se conecta con una teoría y <strong>se puede responder con la evidencia de su ruta</strong> (entrevista o documentos).</p>
+                            <div class="grid md:grid-cols-2 gap-3">
+                                <div class="p-3 rounded-lg bg-red-50 border border-red-100 text-sm"><p class="font-bold text-red-700 text-xs uppercase mb-1">✗ Débil</p><p class="text-red-900">¿Qué es la administración en Distribuidora Andina?</p><p class="text-xs text-red-700 mt-1">Es conceptual y no se responde observando la empresa.</p></div>
+                                <div class="p-3 rounded-lg bg-green-50 border border-green-100 text-sm"><p class="font-bold text-green-700 text-xs uppercase mb-1">✓ Sólida</p><p class="text-green-900">¿En qué medida la estructura del área de operaciones de Distribuidora Andina S.A.S. se corresponde con los principios administrativos de Fayol en 2026?</p></div>
+                            </div>
+                        </div>
+
+                        <!-- 2 Objetivos -->
+                        <div class="border-l-4 border-blue-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">2. Objetivos</h3>
+                            <p class="text-sm text-slate-600 mb-3"><strong>Un objetivo general y tres específicos.</strong> El general responde a la pregunta; los específicos son los pasos para lograrlo. Inician con verbo en infinitivo verificable (identificar, describir, analizar, contrastar, proponer). Eviten "conocer", "entender" o "saber".</p>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-dashed border-slate-300 text-sm text-slate-700 space-y-2">
+                                <p><strong>General:</strong> Analizar la correspondencia entre la estructura del área de operaciones de Distribuidora Andina S.A.S. y los principios administrativos de Fayol.</p>
+                                <p><strong>OE1:</strong> Identificar la estructura formal y las líneas de autoridad del área de operaciones.</p>
+                                <p><strong>OE2:</strong> Contrastar las prácticas encontradas con los principios de división del trabajo, unidad de mando y autoridad.</p>
+                                <p><strong>OE3:</strong> Proponer ajustes organizacionales sustentados en los hallazgos.</p>
+                            </div>
+                        </div>
+
+                        <!-- 3 Justificación -->
+                        <div class="border-l-4 border-blue-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">3. Justificación</h3>
+                            <p class="text-sm text-slate-600">¿Por qué vale la pena estudiar esto? Argumenten en tres dimensiones: <strong>práctica</strong> (qué gana la empresa), <strong>teórica</strong> (qué aporta a la comprensión de la teoría elegida) y <strong>formativa</strong> (qué aprenden ustedes como futuros profesionales). No repitan el problema.</p>
+                        </div>
+
+                        <!-- 4 Antecedentes -->
+                        <div class="border-l-4 border-blue-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">4. Antecedentes</h3>
+                            <p class="text-sm text-slate-600 mb-2">Estudios previos que hayan investigado un problema o una teoría similar. Sugerido: <strong>de 3 a 5 estudios</strong> de los últimos 10 años (tesis, artículos o estudios de caso).</p>
+                            <p class="text-sm text-slate-600">De cada uno, expliquen en un párrafo: autor y año, qué buscaba, cómo lo hizo, qué encontró y <strong>en qué se parece o se diferencia de su trabajo</strong>.</p>
+                        </div>
+
+                        <!-- 5 Marco contextual -->
+                        <div class="border-l-4 border-indigo-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">5. Marco Contextual</h3>
+                            <p class="text-sm text-slate-600 mb-2">¿Dónde estamos parados? Describan la empresa:</p>
+                            <ul class="text-sm text-slate-600 space-y-1 ml-5 list-disc mb-3">
+                                <li>Razón social y actividad económica según el <strong>código CIIU Rev. 4 A.C. (DANE)</strong>.</li>
+                                <li>Tamaño de la empresa (micro, pequeña, mediana o grande), según el criterio de ingresos por actividades ordinarias del Decreto 957 de 2019.</li>
+                                <li>Ubicación geográfica, número aproximado de empleados y estructura organizacional (organigrama).</li>
+                                <li>Breve reseña histórica que explique su evolución, y su situación en el sector.</li>
+                            </ul>
+                            <p class="text-sm text-slate-500"><strong>Ruta aplicada:</strong> la información proviene de la empresa y de la entrevista. <strong>Ruta documental:</strong> sitio web, RUES, informes y prensa, siempre citados.</p>
+                        </div>
+
+                        <!-- 6 Marco teórico -->
+                        <div class="border-l-4 border-indigo-600 pl-5 py-2 bg-indigo-50/40 rounded-r-lg break-avoid">
+                            <h3 class="text-lg font-bold text-indigo-800 mb-2">6. Marco Teórico (El Corazón)</h3>
+                            <p class="text-sm text-indigo-700 mb-3 font-semibold italic">Es la base científica. No es un glosario.</p>
+                            <p class="text-sm text-slate-600 mb-3">Seleccionen <strong>una teoría central</strong>, clásica (Taylor, Fayol, Weber) o moderna, y expliquen sus postulados. Para cada uno, digan por qué sirve para leer el problema de su empresa. Lo que escriban aquí será la base de las categorías de su instrumento o matriz.</p>
+                            <div class="grid sm:grid-cols-3 gap-3 text-sm">
+                                <div class="bg-white p-3 rounded border border-indigo-100"><p class="font-bold text-indigo-700">Taylor</p><p class="text-slate-600">Estudio de tiempos y movimientos, estandarización del método, selección y entrenamiento del trabajador, incentivos.</p></div>
+                                <div class="bg-white p-3 rounded border border-indigo-100"><p class="font-bold text-indigo-700">Fayol</p><p class="text-slate-600">Proceso administrativo (prever, organizar, dirigir, coordinar, controlar) y los 14 principios, como unidad de mando y división del trabajo.</p></div>
+                                <div class="bg-white p-3 rounded border border-indigo-100"><p class="font-bold text-indigo-700">Weber</p><p class="text-slate-600">Burocracia: formalización de normas, jerarquía, especialización de cargos, impersonalidad y documentación escrita.</p></div>
+                            </div>
+                        </div>
+
+                        <!-- 7 Marco conceptual -->
+                        <div class="border-l-4 border-indigo-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">7. Marco Conceptual</h3>
+                            <p class="text-sm text-slate-600">Definan <strong>solo</strong> los conceptos clave que aparecen en su pregunta y en sus objetivos (por ejemplo: estructura organizacional, unidad de mando, autoridad), cada uno con autor citado. Cierren cada definición explicando cómo la entienden en su trabajo.</p>
+                        </div>
+
+                        <!-- 8 Metodología -->
+                        <div class="border-l-4 border-orange-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">8. Metodología</h3>
+                            <p class="text-sm text-slate-600 mb-3">¿Cómo recolectamos la verdad? Debe incluir:</p>
+                            <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                                <div class="p-3 border rounded-lg"><strong>Tipo de investigación:</strong> aplicada o documental, y <em>por qué</em> (acceso o no a un rol estratégico).</div>
+                                <div class="p-3 border rounded-lg"><strong>Enfoque:</strong> cualitativo, cuantitativo o mixto, según los instrumentos.</div>
+                                <div class="p-3 border rounded-lg"><strong>Fuentes / informantes:</strong> quién fue entrevistado (cargo) o qué documentos se revisaron (listado).</div>
+                                <div class="p-3 border rounded-lg"><strong>Técnica e instrumento:</strong> entrevista, encuesta u observación con su guion o cuestionario; o revisión documental con su matriz.</div>
+                                <div class="p-3 border rounded-lg sm:col-span-2"><strong>Procedimiento:</strong> cómo se aplicó el instrumento o se diligenció la matriz y cómo se organizó la información para analizarla.</div>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-2">Detalle de cada ruta en el <strong>Módulo III</strong>.</p>
+                        </div>
+
+                        <!-- 9 Análisis -->
+                        <div class="border-l-4 border-orange-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">9. Análisis de Resultados y Discusión</h3>
+                            <p class="text-sm text-slate-600 mb-3">Aquí se demuestra su aprendizaje. Organicen esta sección <strong>por objetivo específico</strong>.</p>
+                            <div class="p-4 bg-orange-50 rounded-lg border border-orange-100 space-y-3">
+                                <p class="text-sm text-orange-900 leading-relaxed font-medium">
+                                    <strong>OJO:</strong> No es solo poner gráficas o transcribir respuestas. Cada hallazgo se contrasta con lo que dice la teoría del Marco Teórico.
+                                </p>
+                                <p class="text-sm text-orange-900 italic"><strong>Ejemplo (Weber):</strong> "La empresa no cuenta con manual de funciones ni descripciones de cargo escritas. Esto se aleja del principio de formalización de la burocracia de Weber, según el cual las funciones de cada cargo deben estar definidas por normas escritas…"</p>
+                                <p class="text-sm text-orange-900 italic"><strong>Ejemplo (Taylor):</strong> "Según el gerente, cada operario de bodega organiza los pedidos con su propio método. Esto contrasta con la propuesta de Taylor de estudiar tiempos y movimientos para establecer un método estándar…"</p>
+                            </div>
+                        </div>
+
+                        <!-- 10 y 11 Cierre -->
+                        <div class="border-l-4 border-green-500 pl-5 py-2 break-avoid">
+                            <h3 class="text-lg font-bold text-slate-800 mb-3">10–11. Cierre Académico</h3>
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div class="p-3 bg-green-50 rounded-lg">
+                                    <p class="text-sm font-bold uppercase mb-1 text-green-800">Conclusiones</p>
+                                    <p class="text-sm text-slate-600">Mínimo 4: <strong>una por cada objetivo específico</strong> y <strong>una general</strong> que responda directamente la pregunta de investigación. No presenten información nueva.</p>
+                                </div>
+                                <div class="p-3 bg-green-50 rounded-lg">
+                                    <p class="text-sm font-bold uppercase mb-1 text-green-800">Referencias y anexos</p>
+                                    <p class="text-sm text-slate-600">Todo lo citado en el texto debe estar en las referencias, y viceversa, en orden alfabético según APA 7. En los anexos van los instrumentos aplicados o la matriz completa.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div></div>
+            </section>
+
+            <!-- ============ MÓDULO V: SEMÁFORO ============ -->
+            <section class="bg-slate-900 rounded-2xl shadow-xl overflow-hidden">
+                <button type="button" class="acc-btn w-full px-6 md:px-8 py-8 text-left flex justify-between items-center" aria-expanded="false" aria-controls="mod-5">
+                    <span class="flex items-center gap-4">
+                        <i data-lucide="award" class="text-yellow-400 w-8 h-8 shrink-0"></i>
+                        <span>
+                            <span class="block font-bold text-white text-lg md:text-xl tracking-tight">EL SEMÁFORO DE ÉXITO</span>
+                            <span class="block text-sm text-slate-400">Autoevaluación antes de entregar</span>
+                        </span>
+                    </span>
+                    <i data-lucide="chevron-down" class="acc-icon text-slate-400 shrink-0"></i>
+                </button>
+                <div id="mod-5" class="acc-panel"><div class="acc-inner">
+                    <div class="p-6 md:p-10 border-t border-white/10">
+                        <p class="text-sm text-slate-300 mb-2">Califique honestamente cada criterio:</p>
+                        <p class="text-sm text-slate-400 mb-6">🔴 No lo cumplo &nbsp;·&nbsp; 🟡 Lo cumplo a medias &nbsp;·&nbsp; 🟢 Lo cumplo y puedo demostrarlo</p>
+                        <ol id="semaforo" class="space-y-3"></ol>
+                        <div id="sem-resultado" class="mt-6 p-4 rounded-xl bg-white/5 text-sm text-slate-200" aria-live="polite">Califique los criterios para ver su estado.</div>
+                        <div class="text-center mt-10">
+                            <p class="text-xl md:text-2xl font-serif italic text-slate-300 leading-snug">
+                                "Investigar es el arte de transformar la curiosidad <br class="hidden md:block">en conocimiento estructurado."
+                            </p>
+                            <p class="mt-6 text-xs text-slate-500 uppercase tracking-[0.3em]">Módulo de Teoría de las Organizaciones - 2026</p>
+                        </div>
+                    </div>
+                </div></div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-white py-12 border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-slate-900 font-black text-sm mb-1 uppercase tracking-tighter">Politécnico Grancolombiano</p>
+                <p class="text-slate-500 text-xs uppercase tracking-widest">Facultad de Negocios, Gestión y Sostenibilidad</p>
+            </div>
+            <div class="text-center md:text-right">
+                <p class="text-slate-600 font-bold text-xs">Diseño Lógico: Miguel David Cruz Perez</p>
+                <p class="text-slate-500 text-xs">© Guía Técnica de Navegación Académica</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        if (window.lucide) lucide.createIcons();
+
+        // ---------- Acordeones ----------
+        function setPanel(btn, open) {
+            const panel = document.getElementById(btn.getAttribute('aria-controls'));
+            const icon = btn.querySelector('.acc-icon');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            panel.classList.toggle('open', open);
+            if (icon) icon.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        function setAll(open) {
+            document.querySelectorAll('.acc-btn').forEach(b => setPanel(b, open));
+        }
+        document.querySelectorAll('.acc-btn').forEach(btn => {
+            btn.addEventListener('click', () => setPanel(btn, btn.getAttribute('aria-expanded') !== 'true'));
+        });
+        // Abrir la ruta metodológica por defecto
+        window.addEventListener('load', () => {
+            const def = document.querySelector('[aria-controls="mod-3"]');
+            if (def) setTimeout(() => setPanel(def, true), 400);
+        });
+
+        // ---------- Semáforo de autoevaluación ----------
+        const criterios = [
+            'Mi pregunta está delimitada (empresa, área, periodo) y se puede responder con la evidencia de mi ruta.',
+            'Tengo un objetivo general y tres específicos con verbos verificables.',
+            'Cada objetivo específico tiene su categoría teórica, su parte del instrumento o matriz, su análisis y su conclusión.',
+            'Mi marco teórico explica los postulados de una teoría en relación con mi problema (no es un glosario).',
+            'Justifiqué en la Metodología por qué elegí la ruta aplicada o la documental.',
+            'Las preguntas de mi instrumento o las filas de mi matriz salen de las categorías del marco teórico, y están en los anexos.',
+            'En el análisis, cada hallazgo se contrasta con un postulado teórico citado.',
+            'Tengo mínimo 10 referencias, 4 de ellas de CREA, y ninguna fuente vetada.',
+            'Todo lo citado está en las referencias (y viceversa), en APA 7.',
+            'Revisé el documento en Turnitin y está por debajo del 30%.'
+        ];
+        const estado = new Array(criterios.length).fill(null);
+        const lista = document.getElementById('semaforo');
+        const colores = [
+            { v: 'r', emoji: '🔴', label: 'No lo cumplo' },
+            { v: 'y', emoji: '🟡', label: 'Lo cumplo a medias' },
+            { v: 'g', emoji: '🟢', label: 'Lo cumplo' }
+        ];
+        criterios.forEach((texto, i) => {
+            const li = document.createElement('li');
+            li.className = 'flex flex-col sm:flex-row sm:items-center gap-3 bg-white/5 rounded-lg p-3';
+            const p = document.createElement('p');
+            p.className = 'flex-1 text-sm text-slate-200';
+            p.textContent = (i + 1) + '. ' + texto;
+            const grupo = document.createElement('div');
+            grupo.className = 'flex gap-2 shrink-0';
+            colores.forEach(c => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'sem-btn w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-lg leading-none';
+                b.textContent = c.emoji;
+                b.setAttribute('aria-label', 'Criterio ' + (i + 1) + ': ' + c.label);
+                b.setAttribute('aria-pressed', 'false');
+                b.addEventListener('click', () => {
+                    estado[i] = c.v;
+                    grupo.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+                    b.setAttribute('aria-pressed', 'true');
+                    actualizar();
+                });
+                grupo.appendChild(b);
+            });
+            li.appendChild(p);
+            li.appendChild(grupo);
+            lista.appendChild(li);
+        });
+        function actualizar() {
+            const r = estado.filter(x => x === 'r').length;
+            const y = estado.filter(x => x === 'y').length;
+            const g = estado.filter(x => x === 'g').length;
+            const pend = estado.filter(x => x === null).length;
+            let msg;
+            if (pend > 0) msg = 'Faltan ' + pend + ' criterio(s) por calificar.';
+            else if (r > 0) msg = 'Hay criterios en rojo: el documento todavía no está listo para entregar.';
+            else if (y > 0) msg = 'Va por buen camino. Refuerce los criterios en amarillo antes de entregar.';
+            else msg = '¡Todo en verde! Su documento cumple los criterios de la guía.';
+            document.getElementById('sem-resultado').innerHTML =
+                '<strong>🔴 ' + r + ' &nbsp; 🟡 ' + y + ' &nbsp; 🟢 ' + g + '</strong><br>' + msg;
+        }
+    </script>
+</body>
+</html>
